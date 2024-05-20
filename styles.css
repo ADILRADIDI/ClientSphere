@@ -1,0 +1,163 @@
+body{
+    /* text-decoration: none; */
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    
+}
+/* --------------------page signUP------------------------- */
+.bodySignUp{
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(7,65,158,1) 0%, rgba(141,55,8,1) 0%, rgba(0,212,255,1) 100%);
+}
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+#linkLogin{
+    color: red;
+}
+#form1{
+   width: 400px;
+   outline: none;
+    justify-content: center;
+    align-items: center;
+}
+.divInt{
+    display: flex;
+    flex-direction: column;
+}
+
+#imgSignUp{
+    width: 300px;
+    height: 500px;
+    border-radius: 20px;
+    margin-top: 50px;
+}
+#inptlabel{
+    margin-top: 30px;
+}
+#inpt{
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    border: 1px solid grey;
+}
+#btnSUBMIT{
+    color: #ffffff;
+    background-color: black;
+    border-radius: 25px;
+    padding:10px 40px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    border: 1px solid black;
+    margin-top: 40px;
+}
+#btnSUBMIT:hover{
+    background-color: #333;
+}
+/* page login */
+
+.bodylogin{
+    background-image: url('./images/download.jpg');
+}
+.box{
+    background-color: #ffffff;
+    border-radius: 20px;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    margin-top: 15%;
+}
+#form2{
+    padding: 1rem 2rem;
+}
+#inptlabel2{
+    text-align: start;
+}
+/* styling page home  */
+
+#body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+form {
+    margin: 20px 0;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+input[type="file"] {
+    display: inline-block;
+}
+
+button,
+#da1 ,
+#inpt_file{
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+#da1:hover {
+    background-color: #0056b3;
+}
+
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #007BFF;
+    color: white;
+}
+.container {
+    text-align: center;
+    display: flex;
+}
+
+.container img {
+    max-width: 70px;
+    max-height: 70px;
+    border-radius: 50%;
+}
+/* #inpt_file{
+    display: none;
+} */
