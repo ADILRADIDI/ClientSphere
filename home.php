@@ -1,4 +1,5 @@
 <?php
+session_start();
     require 'DB_connect.php';
 
     // import data
@@ -10,8 +11,10 @@
             while (($data = fgetcsv($file, 10000, ",")) !== FALSE) {
                 $name = $data[0];
                 $email = $data[1];
-                $stmt = $conn->prepare("INSERT INTO clients (name, email) VALUES (?, ?)");
-                $stmt->bind_param("ss", $name, $email);
+                $phone = $data[2];
+                $stmt = $conn->prepare("INSERT INTO clients (name, email,phone) 
+                VALUES (?, ?, ?)");
+                $stmt->bind_param("sss", $name, $email,$phone);
                 $stmt->execute();
             }
             fclose($file);
@@ -59,12 +62,60 @@ if (isset($_POST['export'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client_Management</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .links{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    gap: 30px;
+    }
+    #lk,.btn_addevent,#deleteLink,#updateLink{
+        background-color: #007BFF;
+        border-radius: 20px;
+        padding: 10px 20px;
+        color: white;
+        text-decoration: none;
+    }
+    #lK:hover{
+        background-color: transparent;
+        color: black;
+        transition: 1.5s;
+    }
+    </style>
 </head>
 <body id="body">
 <div class="container">
         <h1>Client_Management</h1>
-        <img src="./images/download.jpg" alt="Image Description">
-        <button class="logout-button">Log Out</button>
+        <!-- image from signUp -->
+        <?php
+// require 'DB_connect.php';
+// if (isset($_POST['id'])) {
+//     $idUser = mysqli_real_escape_string($conn, $_POST['id']);
+
+//     $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+//     $stmt->bind_param("i", $idUser);
+//     $stmt->execute();
+
+//     $result = $stmt->get_result();
+//     if ($result->num_rows > 0) {
+//         while ($row = $result->fetch_assoc()) {
+//             echo '<img src="'.$row['picture'].'" alt="User Image">';
+//         }
+//     } else {
+//         echo "No data found.";
+//     }
+// } else {
+//     echo "ID not provided.";
+// }
+?>
+
+        
+        <!-- <form method="post" action="">
+            <input class="logout-button" type="submit" name="logout" value="Log out">
+        </form> -->
 </div>
     <form method="post" enctype="multipart/form-data">
         <div class="buttons">
@@ -78,14 +129,27 @@ if (isset($_POST['export'])) {
         <input id="da1" type="submit" name="export" value="Export CSV">
         </div>
     </form>
+    <div class="links">
+        <a href='#'><button type="button"
+                data-toggle="modal" data-target="#exampleModal" class="btn_addevent">
+                + ADD Client
+                </button>
+        </a>
+        <!-- Update link -->
+        <a id="updateLink" href="#" data-toggle="modal" 
+        data-target="#updateModal">Update Client</a>
+        <!-- Delete link -->
+        <a id="deleteLink" href="#" data-toggle="modal" 
+        data-target="#deleteModal">Delete Client</a>
+    </div>
 
-    
     <table>
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>phone</th>
             </tr>
         </thead>
         <tbody>
@@ -102,6 +166,8 @@ if (isset($_POST['export'])) {
                 <td>'.$row['idClient'].'</td>
                 <td>'.$row['Name'].'</td>
                 <td>'.$row['Email'].'</td>
+                <td>'.$row['phone'].'</td>
+
         </tr>
             ';
         }
@@ -119,5 +185,101 @@ if (isset($_POST['export'])) {
             inpt.style.display="block";
         })
     </script> -->
+
+
+
+    <!--  -->
+    
+<!-- modal update -->
+<!-- Update Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateModalLabel">Update Event</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="updateForm" method="post" action="updateClient.php">
+          <input type="text" name="id"  placeholder="ID client FOR UPDATE">
+          <br>
+          <input type="text" name="name"  placeholder="client Name">
+          <br>
+          <input type="text" name="email" placeholder="email">
+          <br>
+          <input type="text" name="phone"  placeholder="phone">
+          <br>
+          <input type="submit" class="btn btn-primary" value="Update">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  -->
+<!-- MODAL CODE delete -->
+<div class="modal fade" id="deleteModal" tabindex="-1" 
+role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete Client</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="deleteForm" method="post" action="deleteClient.php">
+          <input type="text" id="id-input" name="id" placeholder="Enter client ID">
+          <br>
+          <input type="submit" class="btn btn-danger" value="Delete">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL CODE -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Information for add Client</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+<form id="postForm" method="post" action="addClient.php">
+    <input type="text" name="name" placeholder="Client Name">
+    <br>
+    <input type="text" name="email" placeholder="Client Email">
+    <br>
+    <input type="text" name="phone" placeholder="Client Phone">
+    <br>
+    <input id="linkHero" type="submit" name="Submit" value="Submit">
+    <br>
+</form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
