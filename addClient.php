@@ -18,6 +18,15 @@
     </style>
 </head>
 <body>
+<?php
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['id'])) {
+    header('Location: login.php');
+    exit();
+}
+?>
     <!-- <h1>hi im here </h1> -->
     <?php
 require 'DB_connect.php';
@@ -26,13 +35,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
+    $idUser= $_SESSION['id'];
 
-    $stmt = $conn->prepare("INSERT INTO clients (name, email, phone) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO clients (name, email, phone,userID) 
+    VALUES (?, ?, ?,?)");
 
     if (!$stmt) {
         echo "Error preparing statement: " . $conn->error;
     } else {
-        $stmt->bind_param("sss", $name, $email, $phone);
+        $stmt->bind_param("sssi", $name, $email, $phone,$idUser);
         if ($stmt->execute()) {
             echo '
             <div id="attention">

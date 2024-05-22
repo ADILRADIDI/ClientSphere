@@ -1,7 +1,18 @@
 <?php
 session_start();
-    require 'DB_connect.php';
+$ses = $_SESSION['id'];
+// Check if the user is logged in
+if (!isset($_SESSION['id'])) {
+    header('Location: login.php');
+    exit();
+}
+?>
 
+
+<?php
+
+    require 'DB_connect.php';
+    $sessID = $_SESSION['id'];
     // import data
     if (isset($_POST['import'])) {
         $filename = $_FILES['file']['tmp_name'];
@@ -12,9 +23,11 @@ session_start();
                 $name = $data[0];
                 $email = $data[1];
                 $phone = $data[2];
-                $stmt = $conn->prepare("INSERT INTO clients (name, email,phone) 
-                VALUES (?, ?, ?)");
-                $stmt->bind_param("sss", $name, $email,$phone);
+                $stmt = $conn->prepare("INSERT INTO clients (name, email,phone,userID) 
+                VALUES (?, ?, ?, ?)");
+
+                $stmt->bind_param("sssi", $name, $email,
+                $phone,$sessID);
                 $stmt->execute();
             }
             fclose($file);
@@ -22,7 +35,8 @@ session_start();
     }
 
 // select table and  Export data in csv
-$select = "SELECT * FROM clients";
+$ID1 = $_SESSION['id'];
+$select = "SELECT * FROM clients where userID = $ID1";
 $result = $conn->query($select);
 
 $clients = array();
@@ -113,9 +127,9 @@ if (isset($_POST['export'])) {
 ?>
 
         
-        <!-- <form method="post" action="">
-            <input class="logout-button" type="submit" name="logout" value="Log out">
-        </form> -->
+    <form action="logout.php" method="post">
+        <button type="submit" class="button">Logout</button>
+    </form>
 </div>
     <form method="post" enctype="multipart/form-data">
         <div class="buttons">
@@ -156,7 +170,9 @@ if (isset($_POST['export'])) {
         <?php
     require 'DB_connect.php';
 
-    $stmt = $conn->prepare("SELECT * FROM clients");
+    $stmt = $conn->prepare("SELECT * FROM clients WHERE userID = ?");
+    $IDD = $_SESSION['id'];
+    $stmt->bind_param("i", $IDD);
     $stmt-> execute();
     $result = $stmt->get_result();
     if ($result->num_rows > 0) {

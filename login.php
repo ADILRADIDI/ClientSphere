@@ -30,6 +30,7 @@
 
 <?php
 require 'DB_connect.php';
+session_start();
 // echo $row['id'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -45,8 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // if (password_verify($password, $row['password'])) {
         if ($password == $row['password'] && $email == $row['email']) {
-            session_start();
-            $_SESSION['id'] = $row['id']; 
+            $_SESSION['id'] = $row['id'];
+            echo $_SESSION['id']; 
             header("Location: home.php");
             exit(); 
         } else {
